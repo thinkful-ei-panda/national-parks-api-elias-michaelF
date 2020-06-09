@@ -2,6 +2,7 @@
 //api url: https://developer.nps.gov/api/v1/parks?parkCode=acad&api_key=kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I
 
 function htmlTemplate(name, des, url) {
+  //Generates HTML Template
   return `<li> 
     <p>${name}</p>
     <p>${des}</p>
@@ -10,9 +11,11 @@ function htmlTemplate(name, des, url) {
  `;
 }
 function printList(data) {
-  $('.results').html(
+  //Renders HTML Template
+  $('#results').html(
     data.map((park) => htmlTemplate(park.fullName, park.description, park.url))
   );
+  $('#results').removeClass('hidden');
 }
 function callAPI(states, num) {
   const stateQuery = 'stateCode=' + states;
@@ -21,10 +24,10 @@ function callAPI(states, num) {
   fetch(
     `https://developer.nps.gov/api/v1/parks?${stateQuery}&${limit}&${apiKey}`
   )
-    .then((res) =>
-      res.ok ? res.json() : Promise.reject('Cannot fetch parks data')
+    .then((response) =>
+      response.ok ? response.json() : Promise.reject('Cannot fetch parks data')
     )
-    .then((res) => printList(res.data));
+    .then((response) => printList(response.data));
 }
 function searchParks() {
   // Listens to when user clicks submit
@@ -35,7 +38,7 @@ function searchParks() {
     callAPI(states, numResults.toString());
   });
 }
-function main() {
+function watchForm() {
   searchParks();
 }
-$(main);
+$(watchForm);
