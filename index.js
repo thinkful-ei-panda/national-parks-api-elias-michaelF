@@ -1,67 +1,41 @@
 //api key: kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I
 //api url: https://developer.nps.gov/api/v1/parks?parkCode=acad&api_key=kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I
 
-const apiKey = 'kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I'; 
-const searchURL = 'https://developer.nps.gov/api/v1/parks';
-
-function formatQueryParams(params) {
-  const queryItems = Object.keys(params)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-  return queryItems.join('&');
+function htmlTemplate(name, des, url) {
+  return `<li> 
+    <p>${name}</p>
+    <p>${des}</p>
+    <p>${url}</p>
+  </li>
+ `;
 }
-
-function displayResults(responseJson) {
-  // if there are previous results, remove them
-  console.log(responseJson);
-  $('#results-list').empty();
-  // iterate through the items array
-  for (let i = 0; i < responseJson.items.length; i++){
-    // for each video object in the items 
-    //array, add a list item to the results 
-    //list with the video title, description,
-    //and thumbnail
-    $('#results-list').append(
-      `<li><h3>${responseJson.data[i].fullName}</h3>
-      <p>${responseJson.data[i].description}</p>
-      <p>${responseJson.data[i].url}'</p>
-      </li>`
-    )};
-  //display the results section  
-  $('#results').removeClass('hidden');
-};
-
-function getYouTubeVideos(query, maxResults=10) {
-  const params = {
-    key: apiKey,
-    q: query,
-    fullName,
-    maxResults,
-    description,
-    url
-  };
-  const queryString = formatQueryParams(params);
-  const url = searchURL + '?' + queryString;
-
-  console.log(url);
-
-  fetch(url)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(responseJson => displayResults(responseJson))
-    .catch(err => {
-      $('#js-error-message').text(`Something went wrong: ${err.message}`);
-    });
+function printList(data) {
+  $('.results').html(
+    data.map((park) => htmlTemplate(park.fullName, park.description, park.url))
+  );
 }
-
-function watchForm() {
-  $('form').submit(event => {
+function callAPI(states, num) {
+  const stateQuery = 'stateCode=' + states;
+  const apiKey = 'kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I';
+  const limit = 'limit=' + num;
+  fetch(
+    `https://developer.nps.gov/api/v1/parks?${stateQuery}&${limit}&${apiKey}`
+  )
+    .then((res) =>
+      res.ok ? res.json() : Promise.reject('Cannot fetch parks data')
+    )
+    .then((res) => printList(res.data));
+}
+function searchParks() {
+  // Listens to when user clicks submit
+  $('.js-form').submit(function (event) {
     event.preventDefault();
-    const searchTerm = $('#js-search-term').val();
-    const maxResults = $('#js-max-results').val();
-    getYouTubeVideos(searchTerm, maxResults);
+    let states = $('.js-states').val();
+    let numResults = $('.js-numOfResult').val();
+    callAPI(states, numResults.toString());
   });
 }
+function main() {
+  searchParks();
+}
+$(main);
