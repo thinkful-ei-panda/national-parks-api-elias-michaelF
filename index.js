@@ -30,7 +30,7 @@ function displayResults(responseJson) {
   $('#results').removeClass('hidden');
 };
 
-function getYouTubeVideos(query, maxResults=10) {
+function getParks(query, maxResults=10) {
   const params = {
     key: apiKey,
     q: query,
@@ -62,6 +62,6 @@ function watchForm() {
     event.preventDefault();
     const searchTerm = $('#js-search-term').val();
     const maxResults = $('#js-max-results').val();
-    getYouTubeVideos(searchTerm, maxResults);
+    getParks(searchTerm, maxResults);
   });
 }
