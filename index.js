@@ -2,14 +2,14 @@
 //api url: https://developer.nps.gov/api/v1/parks?parkCode=acad&api_key=kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I
 
 function htmlTemplate(name, des, addresses, url) {
-  console.log('template is getting created');
-  //Generates HTML Template
+  //identify physical address
   if (addresses[0].type === 'Physical') {
     var i = 0;
   } else {
     i = 1;
   }
-  if (addresses[i].line2 && addresses[i].line3 === '') {
+  //Identify which address lines are blank and setting the template for the line items, respectively.
+  if ((addresses[i].line2.length && addresses[i].line3.length) === 0) {
     return `<li>
       <h3>${name}</h3>
       <p>${des}</p>
@@ -17,7 +17,7 @@ function htmlTemplate(name, des, addresses, url) {
       <p><a href="${url}">${url}</a></p>
       </li>
     `;
-  } else if (addresses[i].line2 === ''){
+  } else if (addresses[i].line2.length === 0){
     return `<li>
       <h3>${name}</h3>
       <p>${des}</p>
@@ -25,7 +25,7 @@ function htmlTemplate(name, des, addresses, url) {
       <p><a href="${url}">${url}</a></p>
       </li>
     `;
-  } else if (addresses[i].line3 === ''){
+  } else if (addresses[i].line3.length === 0){
     return `<li>
       <h3>${name}</h3>
       <p>${des}</p>
@@ -43,15 +43,17 @@ function htmlTemplate(name, des, addresses, url) {
  `;
   }
 }
+
+//Renders the template
 function printList(data) {
-  //Renders HTML Template
   $('.results').html(
-    data.map((park) => htmlTemplate(park.fullName, park.description, park.url))
+    data.map((park) => htmlTemplate(park.fullName, park.description, park.addresses, park.url))
   );
 }
 
 function callAPI(states, num) {
-  const stateQuery = `stateCode=${states}.replace(' ','')`;
+  //Allows for comma delineated states inrespective of a space between commas and letters.
+  const stateQuery = `stateCode=${states.replace(' ','')}`;
   const apiKey = 'api_key=kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I';
   const limit = 'limit=' + num;
   fetch(
@@ -66,7 +68,6 @@ function callAPI(states, num) {
 function searchParks() {
   // Listens to when user clicks submit
   $('.js-form').submit(function (event) {
-    console.log('search is running');
     event.preventDefault();
     let states = $('.js-states').val();
     let numResults = $('.js-numOfResult').val();
@@ -77,4 +78,5 @@ function watchForm() {
   searchParks();
 }
 
+//Inception point. 
 $(watchForm);
