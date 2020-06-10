@@ -12,7 +12,7 @@ function htmlTemplate(name, des, url) {
 }
 function printList(data) {
   //Renders HTML Template
-  $('.results').append(
+  $('.results').html(
     data.map((park) => htmlTemplate(park.fullName, park.description, park.url))
   );
 }
@@ -40,7 +40,7 @@ function searchParks() {
     callAPI(states, numResults.toString());
   });
 }
-
+git 
 function watchForm() {
   searchParks();
 }
