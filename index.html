@@ -10,27 +10,19 @@
 </head>
 <body>
     <main>
-        <div class="container">
-            <h1>National Parks Search</h1>
-        
-            <form id="js-form">
-                <label for="search-term">Enter State:</label>
-                    <input type="text" name="search-term" id="js-states" required>
-        
-                <label for="max-results">Maximum results</label>
-                    <input type="number" name="max-results" id="js-numOfResult" value="10">
+        <h1>National Parks Search</h1>
+        <form class="js-form">
+            <label for="search">Enter State:</label>
+                <input type="text" name="search" class="js-states" required>
+    
+            <label>Maximum results</label>
+                <input type="number" class="js-numOfResult" value="10">
 
-                    <input type="submit" value="Search">
-            </form>
-            <p id="js-error-message" class="error-message"></p>
-            <section id="results" class="hidden">
-              <h2>Search results</h2>
-              <ul id="results">
-              </ul>
-            </section>
-          </div>
+                <button type="submit" class="js-search">Search</button>
+        </form>
+        <ul class="results"></ul>
     </main>
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="index.js"></script>
 </body>
 </html>

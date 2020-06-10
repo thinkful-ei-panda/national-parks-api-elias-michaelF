@@ -4,41 +4,45 @@
 function htmlTemplate(name, des, url) {
   //Generates HTML Template
   return `<li> 
-    <p>${name}</p>
+    <h3>${name}</h3>
     <p>${des}</p>
-    <p>${url}</p>
+    <p><a href="${url}">${url}</a></p>
   </li>
  `;
 }
 function printList(data) {
   //Renders HTML Template
-  $('#results').html(
+  $('.results').append(
     data.map((park) => htmlTemplate(park.fullName, park.description, park.url))
   );
-  $('#results').removeClass('hidden');
 }
+
 function callAPI(states, num) {
   const stateQuery = 'stateCode=' + states;
-  const apiKey = 'kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I';
+  const apiKey = 'api_key=kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I';
   const limit = 'limit=' + num;
   fetch(
     `https://developer.nps.gov/api/v1/parks?${stateQuery}&${limit}&${apiKey}`
   )
-    .then((response) =>
-      response.ok ? response.json() : Promise.reject('Cannot fetch parks data')
+    .then((res) =>
+      res.ok ? res.json() : Promise.reject('Cannot fetch parks data')
     )
-    .then((response) => printList(response.data));
+    .then((res) => printList(res.data));
 }
+
 function searchParks() {
   // Listens to when user clicks submit
   $('.js-form').submit(function (event) {
+    console.log('search is running');
     event.preventDefault();
     let states = $('.js-states').val();
     let numResults = $('.js-numOfResult').val();
     callAPI(states, numResults.toString());
   });
 }
+
 function watchForm() {
   searchParks();
 }
+
 $(watchForm);
