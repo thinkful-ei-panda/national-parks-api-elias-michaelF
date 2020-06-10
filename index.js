@@ -40,7 +40,6 @@ function searchParks() {
     callAPI(states, numResults.toString());
   });
 }
-git 
 function watchForm() {
   searchParks();
 }
