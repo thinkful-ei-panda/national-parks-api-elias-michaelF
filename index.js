@@ -51,7 +51,7 @@ function printList(data) {
 }
 
 function callAPI(states, num) {
-  const stateQuery = 'stateCode=' + states;
+  const stateQuery = `stateCode=${states}.replace(' ','')`;
   const apiKey = 'api_key=kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I';
   const limit = 'limit=' + num;
   fetch(
