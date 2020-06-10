@@ -1,21 +1,53 @@
 //api key: kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I
 //api url: https://developer.nps.gov/api/v1/parks?parkCode=acad&api_key=kHxGnN12wErlgIBuQccdlyjRpZEtvtQYfS8cqa1I
 
-function htmlTemplate(name, des, url) {
+function htmlTemplate(name, des, addresses, url) {
   console.log('template is getting created');
   //Generates HTML Template
-  return `<li> 
-    <p>${name}</p>
+  if (addresses[0].type === 'Physical') {
+    var i = 0;
+  } else {
+    i = 1;
+  }
+  if (addresses[i].line2 && addresses[i].line3 === '') {
+    return `<li>
+      <h3>${name}</h3>
+      <p>${des}</p>
+      <p>${addresses[i].line1}</br>${addresses[i].city}</br>${addresses[i].stateCode}</br>${addresses[i].postalCode}</p>
+      <p><a href="${url}">${url}</a></p>
+      </li>
+    `;
+  } else if (addresses[i].line2 === ''){
+    return `<li>
+      <h3>${name}</h3>
+      <p>${des}</p>
+      <p>${addresses[i].line1}</br>${addresses[i].line3}</br>${addresses[i].city}</br>${addresses[i].stateCode}</br>${addresses[i].postalCode}</p>
+      <p><a href="${url}">${url}</a></p>
+      </li>
+    `;
+  } else if (addresses[i].line3 === ''){
+    return `<li>
+      <h3>${name}</h3>
+      <p>${des}</p>
+      <p>${addresses[i].line1}</br>${addresses[i].line2}</br>${addresses[i].city}</br>${addresses[i].stateCode}</br>${addresses[i].postalCode}</p>
+      <p><a href="${url}">${url}</a></p>
+      </li>
+    `;
+  } else{
+    return `<li> 
+    <h3>${name}</h3>
     <p>${des}</p>
-    <p>${url}</p>
+    <p>${addresses[i].line1}</br>${addresses[i].line2}</br>${addresses[i].line3}</br>${addresses[i].city}</br>${addresses[i].stateCode}</br>${addresses[i].postalCode}</p>
+    <p><a href="${url}">${url}</a></p>
   </li>
  `;
+  }
 }
 function printList(data) {
-  console.log("start printing");
+  console.log('start printing');
   //Renders HTML Template
   $('#results2').html(
-    data.map((park) => htmlTemplate(park.fullName, park.description, park.url))
+    data.map((park) => htmlTemplate(park.fullName, park.description, park.addresses, park.url))
   );
   $('#results').removeClass('hidden');
   console.log('printing out the list');
